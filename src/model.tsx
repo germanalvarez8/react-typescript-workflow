@@ -9,6 +9,7 @@ export interface WorkflowDefinition extends Definition {
 export interface TaskStep extends Step {
 	componentType: 'task';
 	type: 'task';
+	name: string
 	properties: {
 		x?: string;
 		y?: string;
@@ -17,7 +18,7 @@ export interface TaskStep extends Step {
 
 export interface SwitchStep extends BranchedStep {
 	type: 'switch';
-	name: 'switch';
+	name: string;
 	properties: {
 		x?: string;
 		y?: string;

@@ -3,16 +3,30 @@ import { ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration } from 'se
 import { SequentialWorkflowDesigner, wrapDefinition } from 'sequential-workflow-designer-react';
 import { GlobalEditor } from './GlobalEditor';
 import { StepEditor } from './StepEditor';
-import { createSwitchStep, createTaskStep } from './StepUtils';
+import { createSwitchStep, createTaskStepWithName, createTaskStepList } from './StepUtils';
 import { WorkflowDefinition } from './model';
 
 const startDefinition: WorkflowDefinition = {
 	properties: {},
-	sequence: [createTaskStep(), createSwitchStep()]
+	sequence: []
 };
 
 const toolboxConfiguration: ToolboxConfiguration = {
-	groups: [{ name: 'Steps', steps: [createTaskStep(), createSwitchStep()] }]
+	groups: [
+		{
+			name: 'Status',
+			steps: createTaskStepList(['ENVIADA', 'ENTREGADA', 'INGRESADA'])
+		},
+		{
+			name: 'Actions',
+			steps: [createTaskStepWithName('SendMessage')]
+		},
+		{
+			name: 'Conditions',
+			steps: [createSwitchStep()]
+		},
+	]
+	// groups: [{ name: 'Status', steps: [createTaskStep(), createSwitchStep()] }]
 };
 
 const stepsConfiguration: StepsConfiguration = {
@@ -20,7 +34,7 @@ const stepsConfiguration: StepsConfiguration = {
 };
 
 export function App() {
-	const [isVisible, setIsVisible] = useState(true);
+	const [isVisible] = useState(true);
 	const [definition, setDefinition] = useState(() => wrapDefinition(startDefinition));
 	const [selectedStepId, setSelectedStepId] = useState<string | null>(null);
 	const [isReadonly, setIsReadonly] = useState(false);
@@ -30,40 +44,28 @@ export function App() {
 		console.log(`definition updated, isValid=${definition.isValid}`);
 	}, [definition]);
 
-	function toggleVisibilityClicked() {
-		setIsVisible(!isVisible);
-	}
-
-	function toggleSelectionClicked() {
-		const id = definition.value.sequence[0].id;
-		setSelectedStepId(selectedStepId ? null : id);
-	}
-
 	function toggleIsReadonlyClicked() {
 		setIsReadonly(!isReadonly);
-	}
-
-	function reloadDefinitionClicked() {
-		const newDefinition = ObjectCloner.deepClone(startDefinition);
-		setDefinition(wrapDefinition(newDefinition));
 	}
 
 	return (
 		<>
 			{isVisible && (
-				<SequentialWorkflowDesigner
-					undoStackSize={10}
-					definition={definition}
-					onDefinitionChange={setDefinition}
-					selectedStepId={selectedStepId}
-					isReadonly={isReadonly}
-					onSelectedStepIdChanged={setSelectedStepId}
-					toolboxConfiguration={toolboxConfiguration}
-					stepsConfiguration={stepsConfiguration}
-					controlBar={true}
-					globalEditor={<GlobalEditor />}
-					stepEditor={<StepEditor />}
-				/>
+				<div>
+					<SequentialWorkflowDesigner
+						undoStackSize={10}
+						definition={definition}
+						onDefinitionChange={setDefinition}
+						selectedStepId={selectedStepId}
+						isReadonly={isReadonly}
+						onSelectedStepIdChanged={setSelectedStepId}
+						toolboxConfiguration={toolboxConfiguration}
+						stepsConfiguration={stepsConfiguration}
+						controlBar={true}
+						globalEditor={<GlobalEditor />}
+						stepEditor={<StepEditor />}
+					/>
+				</div>
 			)}
 
 			<ul>
@@ -74,9 +76,6 @@ export function App() {
 			</ul>
 
 			<div>
-				<button onClick={toggleVisibilityClicked}>Toggle visibility</button>
-				<button onClick={reloadDefinitionClicked}>Reload definition</button>
-				<button onClick={toggleSelectionClicked}>Toggle selection</button>
 				<button onClick={toggleIsReadonlyClicked}>Toggle readonly</button>
 			</div>
 

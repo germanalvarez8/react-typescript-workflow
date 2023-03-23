@@ -6,7 +6,7 @@ export function createTaskStep(): TaskStep {
 		id: Uid.next(),
 		componentType: 'task',
 		type: 'task',
-		name: 'test',
+		name: 'chau',
 		properties: {}
 	};
 }
@@ -16,11 +16,25 @@ export function createSwitchStep(): SwitchStep {
 		id: Uid.next(),
 		componentType: 'switch',
 		type: 'switch',
-		name: 'switch',
+		name: 'if',
 		properties: {},
 		branches: {
 			true: [],
 			false: []
 		}
 	};
+}
+
+export function createTaskStepWithName(step: string): TaskStep {
+	return {
+		id: Uid.next(),
+		componentType: 'task',
+		type: 'task',
+		name: step,
+		properties: {}
+	};
+}
+
+export function createTaskStepList(steps: string[]): TaskStep[] {
+	return steps.map((step) => (createTaskStepWithName(step)));
 }
