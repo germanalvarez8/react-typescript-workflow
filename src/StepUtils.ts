@@ -1,4 +1,4 @@
-import { Uid } from 'sequential-workflow-designer';
+import { Uid, Branches } from 'sequential-workflow-designer';
 import { SwitchStep, TaskStep } from './model';
 
 export function createTaskStep(): TaskStep {
@@ -22,6 +22,31 @@ export function createSwitchStep(): SwitchStep {
 			true: [],
 			false: []
 		}
+	};
+}
+
+export function createSwitchStepWithName(): SwitchStep {
+	return {
+		id: Uid.next(),
+		componentType: 'switch',
+		type: 'switch',
+		name: 'if',
+		properties: {},
+		branches: {
+			true: [],
+			false: []
+		}
+	};
+}
+
+export function createInitialSwitchStep(name: string, branches: Branches): SwitchStep {
+	return {
+		id: Uid.next(),
+		componentType: 'switch',
+		type: 'switch',
+		name: name,
+		properties: {},
+		branches: branches
 	};
 }
 

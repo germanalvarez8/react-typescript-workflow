@@ -1,4 +1,4 @@
-import { Step, BranchedStep, Definition } from 'sequential-workflow-designer';
+import { Step, BranchedStep, Definition, Branches } from 'sequential-workflow-designer';
 
 export interface WorkflowDefinition extends Definition {
 	properties: {
@@ -23,4 +23,5 @@ export interface SwitchStep extends BranchedStep {
 		x?: string;
 		y?: string;
 	};
+	branches: Branches
 }

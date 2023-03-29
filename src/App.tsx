@@ -3,12 +3,12 @@ import { ObjectCloner, Step, StepsConfiguration, ToolboxConfiguration } from 'se
 import { SequentialWorkflowDesigner, wrapDefinition } from 'sequential-workflow-designer-react';
 import { GlobalEditor } from './GlobalEditor';
 import { StepEditor } from './StepEditor';
-import { createSwitchStep, createTaskStepWithName, createTaskStepList } from './StepUtils';
+import { createSwitchStep, createTaskStepWithName, createTaskStepList, createInitialSwitchStep } from './StepUtils';
 import { WorkflowDefinition } from './model';
 
 const startDefinition: WorkflowDefinition = {
 	properties: {},
-	sequence: []
+	sequence: [createInitialSwitchStep('Entity', {orders:[], leads:[]})]
 };
 
 const toolboxConfiguration: ToolboxConfiguration = {
@@ -48,6 +48,10 @@ export function App() {
 		setIsReadonly(!isReadonly);
 	}
 
+	function saveConfiguration() {
+		console.log(definitionJson);
+	}
+
 	return (
 		<>
 			{isVisible && (
@@ -77,6 +81,10 @@ export function App() {
 
 			<div>
 				<button onClick={toggleIsReadonlyClicked}>Toggle readonly</button>
+			</div>
+
+			<div>
+				<button onClick={saveConfiguration}>Save workflow</button>
 			</div>
 
 			<div>
